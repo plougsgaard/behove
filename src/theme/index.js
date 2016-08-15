@@ -37,3 +37,9 @@ export const colors = {
   charcoal: '#595959',
   coal: '#2d2d2d'
 }
+
+export const images = {
+  backgrounds: {
+    berries: require('../../img/berries.jpg')
+  }
+}
