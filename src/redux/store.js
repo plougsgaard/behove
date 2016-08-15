@@ -1,14 +1,19 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import { autoRehydrate } from 'redux-persist'
 import createLogger from 'redux-logger'
+import createSagaMiddleware from 'redux-saga'
+
 import rootReducer from '../reducers'
+import rootSaga from '../sagas'
 
-const logger = createLogger()
+const sagaMiddleware = createSagaMiddleware()
 
-let middleware = []
+let middleware = [
+  sagaMiddleware
+]
 
 if (__DEV__) {
-  middleware.push(logger)
+  middleware.push(createLogger())
 }
 
 export default () => {
@@ -17,8 +22,12 @@ export default () => {
     applyMiddleware(...middleware)
   )
 
-  return createStore(
+  const store = createStore(
     rootReducer,
     enhancers
   )
+
+  sagaMiddleware.run(rootSaga)
+
+  return store
 }
