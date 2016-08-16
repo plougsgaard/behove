@@ -11,7 +11,7 @@ const wrap = (s, style = {}) =>
 
 export const CardItem = ({
   imageSource,
-  title = 'Title',
+  title,
   menuComponent,
   menuPress = noop,
   actionComponent,
@@ -19,8 +19,12 @@ export const CardItem = ({
   children
 }) => (
   <View style={styles.cardStyle}>
-    <Image source={imageSource} style={styles.cardImageStyle}></Image>
-    <Text style={styles.cardTitleStyle}>{title}</Text>
+    {imageSource && (
+      <Image source={imageSource} style={styles.cardImageStyle}></Image>
+    )}
+    {title && (
+      <Text style={styles.cardTitleStyle}>{title}</Text>
+    )}
     <View>
       {wrap(children, styles.cardContentStyle)}
     </View>

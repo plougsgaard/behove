@@ -1,13 +1,12 @@
 import { combineReducers } from 'redux'
 
 import numbers from './numbers'
-
-const tokenReducer = () => ({})
+import auth from './auth'
 
 export const persistentStoreBlacklist = []
 export const persistentStoreWhitelist = []
 
 export default combineReducers({
-  token: tokenReducer,
-  numbers
+  numbers,
+  auth
 })

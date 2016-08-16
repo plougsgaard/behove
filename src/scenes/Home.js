@@ -7,7 +7,9 @@ import { Actions as NavigationActions } from 'react-native-router-flux'
 import { CardItem, CardContainer } from '../components/MaterialCard'
 import { images } from '../theme'
 
-import { incrementAsync } from '../sagas'
+import { loginSubmit } from '../reducers/auth'
+
+const onLogin = (payload, dispatch) => () => dispatch(loginSubmit(payload))
 
 const Home = ({ dispatch, numbers }) => (
   <CardContainer>
@@ -19,6 +21,17 @@ const Home = ({ dispatch, numbers }) => (
       menuPress={() => dispatch({ type: 'INCREMENT_ASYNC' })}
     >
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sagittis pellentesque lacus eleifend lacinia...
+    </CardItem>
+    <CardItem>
+      <Button rounded onPress={() => {
+        const payload = { email: 'a@a.a', password: 'secret' }
+        dispatch(loginSubmit(payload))
+      }}>
+        Call api
+      </Button>
+      <Button rounded onPress={onLogin({ email: 'a@a.a', password: 'secret' }, dispatch)}>
+        Call api222
+      </Button>
     </CardItem>
   </CardContainer>
 )

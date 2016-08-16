@@ -3,6 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "crypto-js": "^3.1.6",
+    "lodash": "^4.15.0",
     "native-base": "git+https://github.com/plougsgaard/NativeBase.git",
     "react": "15.2.1",
     "react-native": "0.31.0",
@@ -10,6 +12,7 @@
     "react-native-router-flux": "^3.34.0",
     "react-native-vector-icons": "^2.0.3",
     "react-redux": "^4.4.5",
+    "recompose": "^0.20.2",
     "redux": "^3.5.2",
     "redux-logger": "^2.6.1",
     "redux-persist": "^3.2.2",

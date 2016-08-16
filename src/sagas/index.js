@@ -1,6 +1,8 @@
 import { takeEvery, delay } from 'redux-saga'
 import { put, call } from 'redux-saga/effects'
 
+import { watchLoginSubmit, watchLoginRequest } from './auth'
+
 export function* helloSaga() {
   console.log('Hello Sagas!')
 }
@@ -21,6 +23,8 @@ export function* watchIncrementAsync() {
 export default function* rootSaga() {
   yield [
     helloSaga(),
-    watchIncrementAsync()
+    watchIncrementAsync(),
+    watchLoginSubmit(),
+    watchLoginRequest()
   ]
 }
