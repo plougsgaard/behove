@@ -1,15 +1,13 @@
 import { StyleSheet, Platform } from 'react-native'
-import { colors } from '../theme'
+import { colors, metrics } from '../theme'
 
 export default StyleSheet.create({
   cardContainer: {
     flex: 1,
-    alignItems: 'stretch',
-    padding: 20,
+    padding: metrics.doubleBasePadding,
     marginTop: Platform.OS === 'android' ? 56 : 0
   },
   cardStyle: {
-    flex: 1,
     backgroundColor: '#ffffff',
     borderRadius: 2,
     borderColor: '#ffffff',
@@ -20,7 +18,7 @@ export default StyleSheet.create({
     shadowOffset: {
       height: 1,
       width: 2,
-    },
+    }
   },
   cardImageStyle: {
     flex: 1,
@@ -33,7 +31,7 @@ export default StyleSheet.create({
     top: 120,
     left: 26,
     backgroundColor: 'transparent',
-    padding: 16,
+    padding: metrics.doubleBasePadding,
     fontSize: 24,
     color: colors.snow,
     fontWeight: 'bold',
@@ -50,8 +48,8 @@ export default StyleSheet.create({
   },
   cardMenuStyle: {
     position: 'absolute',
-    top: 16,
-    right: 16,
+    top: metrics.doubleBasePadding,
+    right: metrics.doubleBasePadding,
     backgroundColor: 'transparent',
   }
 })

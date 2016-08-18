@@ -2,17 +2,23 @@ import { Dimensions, Platform } from 'react-native'
 
 const { width, height } = Dimensions.get('window')
 
+/**
+ * Metrics are constants used for visual elements throughout.
+ * @type {Object}
+ */
 export const metrics = {
   marginHorizontal: 10,
   marginVertical: 10,
   section: 25,
+  smallMargin: 5,
   baseMargin: 10,
   doubleBaseMargin: 20,
-  smallMargin: 5,
+  basePadding: 8,
+  doubleBasePadding: 16,
   horizontalLineHeight: 1,
-  screenWidth: width < height ? width : height,
-  screenHeight: width < height ? height : width,
-  navBarHeight: (Platform.OS === 'ios') ? 64 : 54,
+  screenWidth: Math.min(width, height),
+  screenHeight: Math.max(width, height),
+  navBarHeight: Platform.select({ ios: 64, android: 54 }),
   buttonRadius: 4,
   icons: {
     tiny: 15,
@@ -29,6 +35,10 @@ export const metrics = {
   }
 }
 
+/**
+ * Named (hence themeable) colors
+ * @type {Object}
+ */
 export const colors = {
   background: '#3498db',
   frost: '#D8D8D8',
@@ -38,6 +48,11 @@ export const colors = {
   coal: '#2d2d2d'
 }
 
+/**
+ * Images ready to be served by `source`.
+ * Are inlined into the bundle (use `require`).
+ * @type {Object}
+ */
 export const images = {
   backgrounds: {
     berries: require('../../img/berries.jpg')

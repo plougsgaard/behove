@@ -4,7 +4,7 @@ import styles from './MaterialCard.styles'
 
 const noop = () => {}
 
-const wrap = (s, style = {}) =>
+const wrap = (s, style) =>
   typeof s === 'string'
     ? <Text style={style}>{s}</Text>
     : s
@@ -16,24 +16,24 @@ export const CardItem = ({
   menuPress = noop,
   actionComponent,
   actionPress = noop,
-  children
+  children,
+  style = {}
 }) => (
-  <View style={styles.cardStyle}>
+  <View style={[styles.cardStyle, style]}>
     {imageSource && (
       <Image source={imageSource} style={styles.cardImageStyle}></Image>
     )}
     {title && (
       <Text style={styles.cardTitleStyle}>{title}</Text>
     )}
-    <View>
-      {wrap(children, styles.cardContentStyle)}
-    </View>
-    <TouchableOpacity style={styles.cardMenuStyle} onPress={menuPress}>
-      {wrap(menuComponent)}
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.cardActionStyle} onPress={actionPress}>
-      {wrap(actionComponent)}
-    </TouchableOpacity>
+    {wrap(children, styles.cardContentStyle)}
+    {menuComponent && (
+      <TouchableOpacity style={styles.cardMenuStyle} onPress={menuPress}>
+        {wrap(menuComponent)}
+      </TouchableOpacity>)}
+    {actionComponent && (<TouchableOpacity style={styles.cardActionStyle} onPress={actionPress}>
+        {wrap(actionComponent)}
+      </TouchableOpacity>)}
   </View>
 )
 

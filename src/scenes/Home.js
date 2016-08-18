@@ -22,7 +22,7 @@ const Home = ({ dispatch, numbers }) => (
     >
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sagittis pellentesque lacus eleifend lacinia...
     </CardItem>
-    <CardItem>
+    <CardItem style={{ marginTop: 10 }}>
       <Button rounded onPress={() => {
         const payload = { email: 'a@a.a', password: 'secret' }
         dispatch(loginSubmit(payload))
@@ -33,6 +33,39 @@ const Home = ({ dispatch, numbers }) => (
         Call api222
       </Button>
     </CardItem>
+    <CardItem>
+      <Button rounded onPress={() => {
+        const payload = { email: 'a@a.a', password: 'secret' }
+        dispatch(loginSubmit(payload))
+      }}>
+        CA33333
+      </Button>
+      <Button rounded onPress={onLogin({ email: 'a@a.a', password: 'secret' }, dispatch)}>
+        CA44444
+      </Button>
+    </CardItem>
+        <CardItem>
+          <Button rounded onPress={() => {
+            const payload = { email: 'a@a.a', password: 'secret' }
+            dispatch(loginSubmit(payload))
+          }}>
+            CA33333
+          </Button>
+          <Button rounded onPress={onLogin({ email: 'a@a.a', password: 'secret' }, dispatch)}>
+            CA44444
+          </Button>
+        </CardItem>
+        <CardItem>
+          <Button rounded onPress={() => {
+            const payload = { email: 'a@a.a', password: 'secret' }
+            dispatch(loginSubmit(payload))
+          }}>
+            CA55555-AA
+          </Button>
+          <Button rounded onPress={onLogin({ email: 'a@a.a', password: 'secret' }, dispatch)}>
+            CA55555-BB
+          </Button>
+        </CardItem>
   </CardContainer>
 )
 
