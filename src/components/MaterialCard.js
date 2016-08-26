@@ -21,7 +21,7 @@ export const CardItem = ({
 }) => (
   <View style={[styles.cardStyle, style]}>
     {imageSource && (
-      <Image source={imageSource} style={styles.cardImageStyle}></Image>
+      <Image source={imageSource} style={styles.cardImageStyle} />
     )}
     {title && (
       <Text style={styles.cardTitleStyle}>{title}</Text>
@@ -31,7 +31,8 @@ export const CardItem = ({
       <TouchableOpacity style={styles.cardMenuStyle} onPress={menuPress}>
         {wrap(menuComponent)}
       </TouchableOpacity>)}
-    {actionComponent && (<TouchableOpacity style={styles.cardActionStyle} onPress={actionPress}>
+    {actionComponent && (
+      <TouchableOpacity style={styles.cardActionStyle} onPress={actionPress}>
         {wrap(actionComponent)}
       </TouchableOpacity>)}
   </View>

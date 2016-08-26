@@ -2,6 +2,9 @@
   "name": "behove",
   "version": "0.0.1",
   "private": true,
+  "standard": {
+    "parser": "babel-eslint"
+  },
   "dependencies": {
     "crypto-js": "^3.1.6",
     "lodash": "^4.15.0",

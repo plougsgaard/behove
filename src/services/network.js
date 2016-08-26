@@ -1,3 +1,5 @@
+/* global fetch */
+
 import { PATH_API_BASE } from '../config'
 
 export const getServiceUnavailable = () => ({
@@ -53,15 +55,13 @@ export const httpRequest = (url, options) => {
         if (response.status >= 400) {
           try {
             reject({ _error: await response.json() })
-          }
-          catch (err) {
+          } catch (err) {
             reject({ _error: getBadRequest() })
           }
         } else {
           try {
             resolve(await response.json())
-          }
-          catch (err) {
+          } catch (err) {
             resolve({
               message: response.statusText
             })
@@ -71,8 +71,7 @@ export const httpRequest = (url, options) => {
       async (response) => {
         try {
           reject({ _error: await response.json() })
-        }
-        catch (err) {
+        } catch (err) {
           reject({ _error: getServiceUnavailable() })
         }
       }

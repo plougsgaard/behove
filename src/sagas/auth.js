@@ -1,6 +1,6 @@
 import { httpRequest } from '../services/network'
 import { delay } from 'redux-saga'
-import { take, put, fork, call, race } from 'redux-saga/effects'
+import { take, put, call, race } from 'redux-saga/effects'
 import sha256 from 'crypto-js/sha256'
 
 import {
@@ -8,7 +8,7 @@ import {
   loginRequest, loginError, loginSuccess
 } from '../reducers/auth'
 
-export function* watchLoginSubmit() {
+export function* watchLoginSubmit () {
   while (true) {
     // await LOGIN_SUBMIT
     const { payload } = yield take(LOGIN_SUBMIT)
@@ -21,8 +21,10 @@ export function* watchLoginSubmit() {
     })
     if (error) {
       // do nothing
+      console.warn(error)
     } else {
       // also do nothing
+      console.log(success)
     }
   }
 }
@@ -44,7 +46,7 @@ const login = async ({ email, password }) => {
   return await httpRequest(url, options)
 }
 
-export function* watchLoginRequest() {
+export function* watchLoginRequest () {
   while (true) {
     try {
       // await LOGIN_REQUEST
@@ -53,8 +55,7 @@ export function* watchLoginRequest() {
       const result = yield call(login, payload)
       // success?
       yield put(loginSuccess(result))
-    }
-    catch (e) {
+    } catch (e) {
       yield put(loginError(e))
     }
   }

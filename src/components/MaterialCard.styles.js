@@ -17,7 +17,7 @@ export default StyleSheet.create({
     shadowRadius: 2,
     shadowOffset: {
       height: 1,
-      width: 2,
+      width: 2
     }
   },
   cardImageStyle: {
@@ -34,22 +34,22 @@ export default StyleSheet.create({
     padding: metrics.doubleBasePadding,
     fontSize: 24,
     color: colors.snow,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   cardContentStyle: {
     padding: 15,
-    color: 'rgba(0, 0, 0, 0.54)',
+    color: 'rgba(0, 0, 0, 0.54)'
   },
   cardActionStyle: {
     borderStyle: 'solid',
     borderTopColor: 'rgba(0, 0, 0, 0.1)',
     borderTopWidth: 1,
-    padding: 15,
+    padding: 15
   },
   cardMenuStyle: {
     position: 'absolute',
     top: metrics.doubleBasePadding,
     right: metrics.doubleBasePadding,
-    backgroundColor: 'transparent',
+    backgroundColor: 'transparent'
   }
 })

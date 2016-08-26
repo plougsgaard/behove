@@ -1,5 +1,6 @@
+/* global __DEV__ */
+
 import { createStore, applyMiddleware, compose } from 'redux'
-import { autoRehydrate } from 'redux-persist'
 import createLogger from 'redux-logger'
 import createSagaMiddleware from 'redux-saga'
 
@@ -17,7 +18,6 @@ if (__DEV__) {
 }
 
 export default () => {
-
   const enhancers = compose(
     applyMiddleware(...middleware)
   )

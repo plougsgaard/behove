@@ -1,7 +1,6 @@
 import React from 'react'
-import { View, Text } from 'react-native'
 import { connect } from 'react-redux'
-import { Container, Content, Button, Badge } from 'native-base'
+import { Button, Badge } from 'native-base'
 import { Actions as NavigationActions } from 'react-native-router-flux'
 
 import { CardItem, CardContainer } from '../components/MaterialCard'
@@ -44,28 +43,28 @@ const Home = ({ dispatch, numbers }) => (
         CA44444
       </Button>
     </CardItem>
-        <CardItem>
-          <Button rounded onPress={() => {
-            const payload = { email: 'a@a.a', password: 'secret' }
-            dispatch(loginSubmit(payload))
-          }}>
-            CA33333
-          </Button>
-          <Button rounded onPress={onLogin({ email: 'a@a.a', password: 'secret' }, dispatch)}>
-            CA44444
-          </Button>
-        </CardItem>
-        <CardItem>
-          <Button rounded onPress={() => {
-            const payload = { email: 'a@a.a', password: 'secret' }
-            dispatch(loginSubmit(payload))
-          }}>
-            CA55555-AA
-          </Button>
-          <Button rounded onPress={onLogin({ email: 'a@a.a', password: 'secret' }, dispatch)}>
-            CA55555-BB
-          </Button>
-        </CardItem>
+    <CardItem>
+      <Button rounded onPress={() => {
+        const payload = { email: 'a@a.a', password: 'secret' }
+        dispatch(loginSubmit(payload))
+      }}>
+        CA33333
+      </Button>
+      <Button rounded onPress={onLogin({ email: 'a@a.a', password: 'secret' }, dispatch)}>
+        CA44444
+      </Button>
+    </CardItem>
+    <CardItem>
+      <Button rounded onPress={() => {
+        const payload = { email: 'a@a.a', password: 'secret' }
+        dispatch(loginSubmit(payload))
+      }}>
+        CA55555-AA
+      </Button>
+      <Button rounded onPress={onLogin({ email: 'a@a.a', password: 'secret' }, dispatch)}>
+        CA55555-BB
+      </Button>
+    </CardItem>
   </CardContainer>
 )
 

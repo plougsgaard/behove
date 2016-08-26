@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { View, StatusBar } from 'react-native'
 import { Provider } from 'react-redux'
 import styles from './Root.styles.js'
