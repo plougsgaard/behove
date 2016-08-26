@@ -1,9 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './App'
+import Root from './Root'
+import configureStore from './app/redux/store'
 import './index.css'
 
+const store = configureStore()
+
+const PreRoot = () => (
+  <Root store={store} />
+)
+
 ReactDOM.render(
-  <App />,
+  <PreRoot />,
   document.getElementById('root')
 )

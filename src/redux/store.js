@@ -13,13 +13,14 @@ let middleware = [
   sagaMiddleware
 ]
 
-if (__DEV__) {
+if (typeof __DEV__ !== 'undefined') {
   middleware.push(createLogger())
 }
 
 export default () => {
   const enhancers = compose(
-    applyMiddleware(...middleware)
+    applyMiddleware(...middleware),
+    window.devToolsExtension ? window.devToolsExtension() : f => f
   )
 
   const store = createStore(
