@@ -5,6 +5,19 @@
   "standard": {
     "parser": "babel-eslint"
   },
+  "ava": {
+    "babel": "inherit",
+    "files": [
+      "test/**/*.js",
+      "!test/setupEnvironment.js"
+    ],
+    "require": [
+      "babel-register",
+      "babel-polyfill",
+      "react-native-mock/mock",
+      "./test/setupEnvironment"
+    ]
+  },
   "dependencies": {
     "crypto-js": "^3.1.6",
     "lodash": "^4.15.0",
@@ -17,6 +30,7 @@
     "react-redux": "^4.4.5",
     "recompose": "^0.20.2",
     "redux": "^3.5.2",
+    "redux-actions": "^0.11.0",
     "redux-logger": "^2.6.1",
     "redux-persist": "^3.2.2",
     "redux-saga": "^0.11.0"
@@ -28,7 +42,7 @@
     "lintdiff": "git diff --name-only --cached --relative | grep '\\.js$' | xargs standard | snazzy",
     "clean": "rm -rf $TMPDIR/react-* && watchman watch-del-all && npm cache clean",
     "newclear": "rm -rf $TMPDIR/react-* && watchman watch-del-all && rm -rf ios/build/ModuleCache/* && rm -rf node_modules/ && npm cache clean && npm i",
-    "test": "ava",
+    "test": "ava --verbose --fail-fast",
     "test:watch": "ava --watch",
     "coverage": "nyc ava",
     "android:build": "cd android && ./gradlew assembleRelease",
@@ -37,5 +51,14 @@
     "android:devices": "$ANDROID_HOME/platform-tools/adb devices",
     "android:logcat": "$ANDROID_HOME/platform-tools/adb logcat *:S ReactNative:V ReactNativeJS:V",
     "android:shake": "$ANDROID_HOME/platform-tools/adb devices | grep '\\t' | awk '{print $1}' | sed 's/\\s//g' | xargs -I {} $ANDROID_HOME/platform-tools/adb -s {} shell input keyevent 82"
+  },
+  "devDependencies": {
+    "ava": "^0.16.0",
+    "enzyme": "^2.4.1",
+    "mockery": "^1.7.0",
+    "nyc": "^8.1.0",
+    "react-addons-test-utils": "^15.3.1",
+    "react-dom": "^15.3.1",
+    "react-native-mock": "^0.2.6"
   }
 }
