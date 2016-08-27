@@ -4,7 +4,9 @@ import Root from './Root'
 import configureStore from './app/redux/store'
 import './index.css'
 
-const store = configureStore()
+const store = configureStore({
+  development: true
+})
 
 const PreRoot = () => (
   <Root store={store} />

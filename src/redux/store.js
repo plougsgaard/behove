@@ -1,5 +1,3 @@
-/* global __DEV__ */
-
 import { createStore, applyMiddleware, compose } from 'redux'
 import createLogger from 'redux-logger'
 import createSagaMiddleware from 'redux-saga'
@@ -9,15 +7,12 @@ import rootSaga from '../sagas'
 
 const sagaMiddleware = createSagaMiddleware()
 
-let middleware = [
-  sagaMiddleware
-]
+export default ({ development = false }) => {
+  const middleware = [
+    sagaMiddleware,
+    development && createLogger()
+  ]
 
-if (typeof __DEV__ !== 'undefined') {
-  middleware.push(createLogger())
-}
-
-export default () => {
   const enhancers = compose(
     applyMiddleware(...middleware),
     window.devToolsExtension ? window.devToolsExtension() : f => f
