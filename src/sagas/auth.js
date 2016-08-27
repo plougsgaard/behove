@@ -3,31 +3,7 @@ import { delay } from 'redux-saga'
 import { take, put, call, race } from 'redux-saga/effects'
 import sha256 from 'crypto-js/sha256'
 
-import {
-  LOGIN_REQUEST, LOGIN_SUBMIT, LOGIN_SUCCESS, LOGIN_ERROR,
-  loginRequest, loginError, loginSuccess
-} from '../reducers/auth'
-
-export function* watchLoginSubmit () {
-  while (true) {
-    // await LOGIN_SUBMIT
-    const { payload } = yield take(LOGIN_SUBMIT)
-    // perform LOGIN_REQUEST
-    yield put(loginRequest(payload))
-    // await response - store in variables
-    const { success, error } = yield race({
-      success: take(LOGIN_SUCCESS),
-      error: take(LOGIN_ERROR)
-    })
-    if (error) {
-      // do nothing
-      console.warn(error)
-    } else {
-      // also do nothing
-      console.log(success)
-    }
-  }
-}
+import { types, actions } from '../reducers/auth'
 
 const makeDigest = ({ email, password }) =>
   sha256(`${email}${password}`).toString()
@@ -46,17 +22,43 @@ const login = async ({ email, password }) => {
   return await httpRequest(url, options)
 }
 
+export function* loginFlow () {
+  while (true) {
+    // await LOGIN_SUBMIT
+    const { payload } = yield take(types.LOGIN_SUBMIT)
+    // perform LOGIN_REQUEST
+    yield put(actions.loginRequest(payload))
+    // await response - store in variables
+    const { success, error } = yield race({
+      success: take(types.LOGIN_SUCCESS),
+      error: take(types.LOGIN_ERROR)
+    })
+    if (error) {
+      // do nothing
+    } else if (success) {
+      // also do nothing
+    }
+  }
+}
+
 export function* watchLoginRequest () {
   while (true) {
     try {
       // await LOGIN_REQUEST
-      const { payload } = yield take(LOGIN_REQUEST)
+      const { payload } = yield take(types.LOGIN_REQUEST)
       // make request
       const result = yield call(login, payload)
       // success?
-      yield put(loginSuccess(result))
+      yield put(actions.loginSuccess(result))
     } catch (e) {
-      yield put(loginError(e))
+      yield put(actions.loginError(e))
     }
   }
+}
+
+export default function* rootSaga () {
+  yield [
+    watchLoginRequest(),
+    loginFlow()
+  ]
 }

@@ -2,6 +2,8 @@ import React from 'react'
 
 import { connect } from 'react-redux'
 
+import { actions } from './app/reducers/auth'
+
 const Main = ({ counter, dispatch }) => (
   <div className='align-center'>
     <div className='header'>
@@ -11,7 +13,8 @@ const Main = ({ counter, dispatch }) => (
       Here shall be things of plenty. {counter}
     </p>
     <p className='section'>
-      <button onClick={(e) => { dispatch({ type: 'INCREMENT_ASYNC' }) }}>Do the limbo</button>
+      <button onClick={(e) => { dispatch(actions.loginSubmit({ email: 'a@a.a', password: 'secret' })) }}>LOGIN_SUBMIT</button>
+      <button onClick={(e) => { dispatch(actions.logout()) }}>LOGOUT</button>
     </p>
   </div>
 )

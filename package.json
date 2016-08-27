@@ -43,7 +43,7 @@
     "clean": "rm -rf $TMPDIR/react-* && watchman watch-del-all && npm cache clean",
     "newclear": "rm -rf $TMPDIR/react-* && watchman watch-del-all && rm -rf ios/build/ModuleCache/* && rm -rf node_modules/ && npm cache clean && npm i",
     "test": "ava --verbose --fail-fast",
-    "test:watch": "ava --watch",
+    "test:watch": "ava --watch --verbose",
     "coverage": "nyc ava",
     "android:build": "cd android && ./gradlew assembleRelease",
     "android:install": "cd android && ./gradlew assembleRelease && ./gradlew installRelease",
