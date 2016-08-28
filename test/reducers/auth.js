@@ -60,6 +60,18 @@ test('loginError action payload has error', (t) => {
   )
 })
 
+test('logout action no payload', (t) => {
+  const payloadInput = { message: 'logging out now' }
+  t.deepEqual(
+    actions.logout(),
+    { type: types.LOGOUT }
+  )
+  t.deepEqual(
+    actions.logout(payloadInput),
+    { type: types.LOGOUT }
+  )
+})
+
 //  ██████╗ ███████╗██████╗ ██╗   ██╗ ██████╗███████╗██████╗
 //  ██╔══██╗██╔════╝██╔══██╗██║   ██║██╔════╝██╔════╝██╔══██╗
 //  ██████╔╝█████╗  ██║  ██║██║   ██║██║     █████╗  ██████╔╝

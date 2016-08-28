@@ -14,7 +14,7 @@ export const actions = {
   loginRequest: createAction(types.LOGIN_REQUEST, (p) => _.pick(p, ['email', 'password'])),
   loginSuccess: createAction(types.LOGIN_SUCCESS, (p) => _.pick(p, ['token'])),
   loginError: createAction(types.LOGIN_ERROR, (p) => ({ ...p, error: true })),
-  logout: createAction(types.LOGOUT, (p) => _.omit(p, 'payload')),
+  logout: createAction(types.LOGOUT, (p) => undefined),
 }
 
 export const LOGIN_SUBMIT = 'auth/LOGIN_SUBMIT'
