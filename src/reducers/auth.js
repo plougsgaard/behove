@@ -4,6 +4,8 @@ import { createAction } from 'redux-actions'
 export const types = {
   LOGIN_SUBMIT: 'auth/LOGIN_SUBMIT',
   LOGIN_REQUEST: 'auth/LOGIN_REQUEST',
+  LOGIN_REQUEST_WAITING: 'auth/LOGIN_REQUEST_WAITING',
+  LOGIN_REQUEST_DONE: 'auth/LOGIN_REQUEST_DONE',
   LOGIN_SUCCESS: 'auth/LOGIN_SUCCESS',
   LOGIN_ERROR: 'auth/LOGIN_ERROR',
   LOGOUT: 'auth/LOGOUT'
@@ -12,27 +14,12 @@ export const types = {
 export const actions = {
   loginSubmit: createAction(types.LOGIN_SUBMIT, (p) => _.pick(p, ['email', 'password'])),
   loginRequest: createAction(types.LOGIN_REQUEST, (p) => _.pick(p, ['email', 'password'])),
+  loginRequestWaiting: createAction(types.LOGIN_REQUEST_WAITING, (p) => undefined),
+  loginRequestDone: createAction(types.LOGIN_REQUEST_DONE, (p) => undefined),
   loginSuccess: createAction(types.LOGIN_SUCCESS, (p) => _.pick(p, ['token'])),
   loginError: createAction(types.LOGIN_ERROR, (p) => ({ ...p, error: true })),
-  logout: createAction(types.LOGOUT, (p) => undefined),
+  logout: createAction(types.LOGOUT, (p) => undefined)
 }
-
-export const LOGIN_SUBMIT = 'auth/LOGIN_SUBMIT'
-export const loginSubmit = (payload) => ({ type: LOGIN_SUBMIT, payload })
-
-export const LOGIN_REQUEST = 'auth/LOGIN_REQUEST'
-export const loginRequest = (payload) => ({ type: LOGIN_REQUEST, payload })
-
-export const LOGIN_SUCCESS = 'auth/LOGIN_SUCCESS'
-export const loginSuccess = (payload) => ({ type: LOGIN_SUCCESS, payload })
-
-export const LOGIN_ERROR = 'auth/LOGIN_ERROR'
-export const loginError = (payload) => ({ type: LOGIN_ERROR, payload, error: true })
-
-export const LOGOUT = 'auth/LOGOUT'
-export const logout = () => ({ type: LOGOUT })
-
-// Reducer
 
 const initialState = {
   token: null
@@ -40,13 +27,16 @@ const initialState = {
 
 export default function reducer (state = initialState, action = {}) {
   switch (action.type) {
-    case LOGIN_SUCCESS:
+    case types.LOGIN_SUCCESS:
       return {
         ...state,
         token: action.payload.token
       }
-    case LOGOUT:
-      return initialState
+    case types.LOGOUT:
+      return {
+        ...state,
+        token: null
+      }
     default:
       return state
   }

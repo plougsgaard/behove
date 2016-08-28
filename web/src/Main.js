@@ -14,6 +14,7 @@ const Main = ({ counter, dispatch }) => (
     </p>
     <p className='section'>
       <button onClick={(e) => { dispatch(actions.loginSubmit({ email: 'a@a.a', password: 'secret' })) }}>LOGIN_SUBMIT</button>
+      <button onClick={(e) => { dispatch(actions.loginSubmit({ email: 'a@a.a', password: 'secretz' })) }}>LOGIN_SUBMIT_WRONG_CREDS</button>
       <button onClick={(e) => { dispatch(actions.logout()) }}>LOGOUT</button>
     </p>
   </div>

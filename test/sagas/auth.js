@@ -1,38 +1,126 @@
 import test from 'ava'
-
-import { take, put, race } from 'redux-saga/effects'
+import { take, put, race, call } from 'redux-saga/effects'
+import _ from 'lodash'
 
 import { types, actions } from '../../src/reducers/auth'
-import { loginFlow } from '../../src/sagas/auth'
+import { loginEffect, logoutEffect, loginFlow, makeDigest } from '../../src/sagas/auth'
+import { httpRequest } from '../../src/services/network'
 
-const credentials = { email: 'a@a.a', password: 'secret' }
-const serverResponse = { token: '1234' }
-const submitRace = {
-  success: take(types.LOGIN_SUCCESS),
-  error: take(types.LOGIN_ERROR)
+const email = 'a@a.a'
+const password = 'secret'
+const digest = makeDigest({ email, password })
+const credentials = { email, password }
+const options = {
+  method: 'post',
+  body: {
+    email,
+    digest
+  }
 }
-const submitWinner = {
-  success: take(types.LOGIN_SUCCESS)
+const loginRace = {
+  login: call(loginEffect, credentials),
+  logout: take(types.LOGOUT)
 }
 
-test.skip('loginFlow flow', (t) => {
+//  ███████╗███████╗███████╗███████╗ ██████╗████████╗███████╗
+//  ██╔════╝██╔════╝██╔════╝██╔════╝██╔════╝╚══██╔══╝██╔════╝
+//  █████╗  █████╗  █████╗  █████╗  ██║        ██║   ███████╗
+//  ██╔══╝  ██╔══╝  ██╔══╝  ██╔══╝  ██║        ██║   ╚════██║
+//  ███████╗██║     ██║     ███████╗╚██████╗   ██║   ███████║
+//  ╚══════╝╚═╝     ╚═╝     ╚══════╝ ╚═════╝   ╚═╝   ╚══════╝
+
+test('loginEffect can succeed', (t) => {
+  const generator = loginEffect(credentials)
+
+  let next = generator.next()
+  t.deepEqual(next.value, call(httpRequest, 'auth/login', options))
+
+  next = generator.next()
+  t.true(next.done)
+})
+
+test('loginEffect can fail', (t) => {
+  const generator = loginEffect(credentials)
+
+  let next = generator.next()
+  t.deepEqual(next.value, call(httpRequest, 'auth/login', options))
+
+  next = generator.throw('error')
+  t.deepEqual(next.value, put(actions.loginError('error')))
+
+  next = generator.next()
+  t.false(next.value)
+  t.true(next.done)
+})
+
+test.todo('loginEffect can be interrupted by logout')
+
+//  ███████╗ █████╗  ██████╗  █████╗ ███████╗
+//  ██╔════╝██╔══██╗██╔════╝ ██╔══██╗██╔════╝
+//  ███████╗███████║██║  ███╗███████║███████╗
+//  ╚════██║██╔══██║██║   ██║██╔══██║╚════██║
+//  ███████║██║  ██║╚██████╔╝██║  ██║███████║
+//  ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+
+test('loginFlow succeeds', (t) => {
   const generator = loginFlow()
 
-  let next = generator.next(actions.loginSubmit(credentials))
+  // start generator, run till first yield, give yielded value back
+  // the value is this cause it says so in the code
+  let next = generator.next()
   t.deepEqual(next.value, take(types.LOGIN_SUBMIT))
-  t.is(next.done, false, 'not done')
 
-  next = generator.next(actions.loginRequest(credentials))
-  t.deepEqual(next.value, put(actions.loginRequest(credentials)))
-  t.is(next.done, false)
+  // pass in the value to the first yield expression
+  next = generator.next(actions.loginSubmit(credentials))
+  t.deepEqual(next.value, put(actions.loginRequestWaiting()))
 
-  // TODO things are a bit fuzzy from here..
+  // the next yielded value is a race
+  next = generator.next()
+  t.deepEqual(next.value, race(loginRace))
 
-  next = generator.next({ data: credentials })
-  t.deepEqual(next.value, race(submitRace))
-  t.is(next.done, false)
+  // pass the winner of the race to the second third expression
+  // also remember `next.value.login` since we'll need it shortly
+  next = generator.next(_.pick(loginRace, 'login'))
+  const loginSuccessValue = next.value.login
+  t.deepEqual(next.value, put(actions.loginRequestDone()))
 
-  next = generator.next(submitWinner)
-  t.deepEqual(next.value, take(types.LOGIN_SUCCESS))
-  t.is(next.done, false)
+  // here's where we need that `next.value.login` from earlier
+  next = generator.next()
+  t.deepEqual(next.value, put(actions.loginSuccess(loginSuccessValue)))
+
+  // and the loop continues from the beginning
+  next = generator.next()
+  t.deepEqual(next.value, take(types.LOGIN_SUBMIT))
 })
+
+test.todo('loginFlow encounters server error')
+
+test('loginFlow is interrupted by logout', (t) => {
+  const generator = loginFlow()
+
+  // start generator, run till first yield, give yielded value back
+  // the value is this cause it says so in the code
+  let next = generator.next()
+  t.deepEqual(next.value, take(types.LOGIN_SUBMIT))
+
+  // pass in the value to the first yield expression
+  next = generator.next(actions.loginSubmit(credentials))
+  t.deepEqual(next.value, put(actions.loginRequestWaiting()))
+
+  // the next yielded value is a race
+  next = generator.next()
+  t.deepEqual(next.value, race(loginRace))
+
+  // pass the winner of the race to the second yield expression
+  next = generator.next(_.pick(loginRace, 'logout'))
+  t.deepEqual(next.value, put(actions.loginRequestDone()))
+
+  next = generator.next()
+  t.deepEqual(next.value, call(logoutEffect))
+
+  // and the loop continues from the beginning
+  next = generator.next()
+  t.deepEqual(next.value, take(types.LOGIN_SUBMIT))
+})
+
+test.todo('logoutFlow works')
