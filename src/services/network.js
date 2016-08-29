@@ -54,9 +54,9 @@ export const httpRequest = (url, options) => {
       async (response) => {
         if (response.status >= 400) {
           try {
-            reject({ _error: await response.json() })
+            reject({ error: await response.json() })
           } catch (err) {
-            reject({ _error: getBadRequest() })
+            reject({ error: getBadRequest() })
           }
         } else {
           try {
@@ -70,9 +70,9 @@ export const httpRequest = (url, options) => {
       },
       async (response) => {
         try {
-          reject({ _error: await response.json() })
+          reject({ error: await response.json() })
         } catch (err) {
-          reject({ _error: getServiceUnavailable() })
+          reject({ error: getServiceUnavailable() })
         }
       }
     )

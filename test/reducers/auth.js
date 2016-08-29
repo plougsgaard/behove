@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import reducer, { types, actions } from '../../src/reducers/auth'
+import reducer, { types, actions, initialState } from '../../src/reducers/auth'
 
 //   █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
 //  ██╔══██╗██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝
@@ -52,10 +52,9 @@ test('loginSuccess action payload', (t) => {
 })
 
 test('loginError action payload has error', (t) => {
-  const payloadInput = { message: 'something went wrong' }
-  const payload = { ...payloadInput, error: true }
+  const payload = { error: 'something went wrong' }
   t.deepEqual(
-    actions.loginError(payloadInput),
+    actions.loginError(payload),
     { type: types.LOGIN_ERROR, payload }
   )
 })
@@ -81,5 +80,5 @@ test('logout action no payload', (t) => {
 
 test('reducer has sane initial state', (t) => {
   const s = reducer()
-  t.deepEqual(s, { token: null })
+  t.deepEqual(s, initialState)
 })
