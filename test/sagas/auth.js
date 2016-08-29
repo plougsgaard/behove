@@ -4,19 +4,13 @@ import _ from 'lodash'
 
 import { types, actions } from '../../src/reducers/auth'
 import { loginEffect, logoutEffect, loginFlow, makeDigest } from '../../src/sagas/auth'
-import { httpRequest } from '../../src/services/network'
+import { postRequest } from '../../src/services/network'
 
 const email = 'a@a.a'
 const password = 'secret'
 const digest = makeDigest({ email, password })
 const credentials = { email, password }
-const options = {
-  method: 'post',
-  body: {
-    email,
-    digest
-  }
-}
+const body = { email, digest }
 const loginRace = {
   login: call(loginEffect, credentials),
   logout: take(types.LOGOUT)
@@ -33,7 +27,7 @@ test('loginEffect can succeed', (t) => {
   const generator = loginEffect(credentials)
 
   let next = generator.next()
-  t.deepEqual(next.value, call(httpRequest, 'auth/login', options))
+  t.deepEqual(next.value, call(postRequest, 'auth/login', body))
 
   next = generator.next()
   t.true(next.done)
@@ -43,7 +37,7 @@ test('loginEffect can fail', (t) => {
   const generator = loginEffect(credentials)
 
   let next = generator.next()
-  t.deepEqual(next.value, call(httpRequest, 'auth/login', options))
+  t.deepEqual(next.value, call(postRequest, 'auth/login', body))
 
   next = generator.throw('error')
   t.deepEqual(next.value, put(actions.loginError('error')))

@@ -1,4 +1,4 @@
-import { httpRequest } from '../services/network'
+import { postRequest } from '../services/network'
 import { delay } from 'redux-saga'
 import { take, put, call, race } from 'redux-saga/effects'
 import sha256 from 'crypto-js/sha256'
@@ -17,15 +17,12 @@ export const makeDigest = ({ email, password }) => sha256(`${email}${password}`)
 export function* loginEffect({ email, password }) {
   const digest = makeDigest({ email, password })
   const url = 'auth/login'
-  const options = {
-    method: 'post',
-    body: {
-      email,
-      digest
-    }
+  const body = {
+    email,
+    digest
   }
   try {
-    const token = yield call(httpRequest, url, options)
+    const token = yield call(postRequest, url, body)
     return token
   } catch (error) {
     yield put(actions.loginError(error))
