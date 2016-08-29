@@ -68,10 +68,10 @@ test('loginFlow succeeds', (t) => {
   // start generator, run till first yield, give yielded value back
   // the value is this cause it says so in the code
   let next = generator.next()
-  t.deepEqual(next.value, take(types.LOGIN_SUBMIT))
+  t.deepEqual(next.value, take(types.LOGIN_REQUEST))
 
   // pass in the value to the first yield expression
-  next = generator.next(actions.loginSubmit(credentials))
+  next = generator.next(actions.loginRequest(credentials))
   t.deepEqual(next.value, put(actions.loginRequestWaiting()))
 
   // the next yielded value is a race
@@ -90,7 +90,7 @@ test('loginFlow succeeds', (t) => {
 
   // and the loop continues from the beginning
   next = generator.next()
-  t.deepEqual(next.value, take(types.LOGIN_SUBMIT))
+  t.deepEqual(next.value, take(types.LOGIN_REQUEST))
 })
 
 test.todo('loginFlow encounters server error')
@@ -101,10 +101,10 @@ test('loginFlow is interrupted by logout', (t) => {
   // start generator, run till first yield, give yielded value back
   // the value is this cause it says so in the code
   let next = generator.next()
-  t.deepEqual(next.value, take(types.LOGIN_SUBMIT))
+  t.deepEqual(next.value, take(types.LOGIN_REQUEST))
 
   // pass in the value to the first yield expression
-  next = generator.next(actions.loginSubmit(credentials))
+  next = generator.next(actions.loginRequest(credentials))
   t.deepEqual(next.value, put(actions.loginRequestWaiting()))
 
   // the next yielded value is a race
@@ -120,7 +120,7 @@ test('loginFlow is interrupted by logout', (t) => {
 
   // and the loop continues from the beginning
   next = generator.next()
-  t.deepEqual(next.value, take(types.LOGIN_SUBMIT))
+  t.deepEqual(next.value, take(types.LOGIN_REQUEST))
 })
 
 test.todo('logoutFlow works')

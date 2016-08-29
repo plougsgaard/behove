@@ -49,7 +49,7 @@ export function* logoutEffect() {
  */
 export function* loginFlow () {
   while (true) {
-    const { payload } = yield take(types.LOGIN_SUBMIT);
+    const { payload } = yield take(types.LOGIN_REQUEST);
     // let everyone know we are waiting for something
     yield put(actions.loginRequestWaiting())
     // branch out to let `loginEffect` handle the messy network stuff

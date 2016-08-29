@@ -6,9 +6,9 @@ import { Actions as NavigationActions } from 'react-native-router-flux'
 import { CardItem, CardContainer } from '../components/MaterialCard'
 import { images } from '../theme'
 
-import { loginSubmit } from '../reducers/auth'
+import { loginRequest } from '../reducers/auth'
 
-const onLogin = (payload, dispatch) => () => dispatch(loginSubmit(payload))
+const onLogin = (payload, dispatch) => () => dispatch(loginRequest(payload))
 
 const Home = ({ dispatch, numbers }) => (
   <CardContainer>
@@ -24,7 +24,7 @@ const Home = ({ dispatch, numbers }) => (
     <CardItem style={{ marginTop: 10 }}>
       <Button rounded onPress={() => {
         const payload = { email: 'a@a.a', password: 'secret' }
-        dispatch(loginSubmit(payload))
+        dispatch(loginRequest(payload))
       }}>
         Call api
       </Button>
@@ -35,7 +35,7 @@ const Home = ({ dispatch, numbers }) => (
     <CardItem>
       <Button rounded onPress={() => {
         const payload = { email: 'a@a.a', password: 'secret' }
-        dispatch(loginSubmit(payload))
+        dispatch(loginRequest(payload))
       }}>
         CA33333
       </Button>
@@ -46,7 +46,7 @@ const Home = ({ dispatch, numbers }) => (
     <CardItem>
       <Button rounded onPress={() => {
         const payload = { email: 'a@a.a', password: 'secret' }
-        dispatch(loginSubmit(payload))
+        dispatch(loginRequest(payload))
       }}>
         CA33333
       </Button>
@@ -57,7 +57,7 @@ const Home = ({ dispatch, numbers }) => (
     <CardItem>
       <Button rounded onPress={() => {
         const payload = { email: 'a@a.a', password: 'secret' }
-        dispatch(loginSubmit(payload))
+        dispatch(loginRequest(payload))
       }}>
         CA55555-AA
       </Button>

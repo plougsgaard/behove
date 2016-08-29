@@ -14,26 +14,12 @@ test('loginRequest action payload', (t) => {
   const payloadInput = { ...payload }
   const payloadInputWithExtraKeys = { ...payload, age: 30 }
   t.deepEqual(
-    actions.loginRequest(payload),
+    actions.loginRequest(payloadInput),
     { type: types.LOGIN_REQUEST, payload }
   )
   t.deepEqual(
     actions.loginRequest(payloadInputWithExtraKeys),
     { type: types.LOGIN_REQUEST, payload }
-  )
-})
-
-test('loginSubmit action payload', (t) => {
-  const payload = { email: 'a@a.a', password: 'secret' }
-  const payloadInput = { ...payload }
-  const payloadInputWithExtraKeys = { ...payload, age: 30 }
-  t.deepEqual(
-    actions.loginSubmit(payloadInput),
-    { type: types.LOGIN_SUBMIT, payload }
-  )
-  t.deepEqual(
-    actions.loginSubmit(payloadInputWithExtraKeys),
-    { type: types.LOGIN_SUBMIT, payload }
   )
 })
 
