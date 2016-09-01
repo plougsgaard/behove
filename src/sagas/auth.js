@@ -27,7 +27,9 @@ export function* loginEffect({ email, password }) {
     const token = yield call(postRequest, url, body)
     return token
   } catch (error) {
-    yield put(actions.loginError(error))
+    if (_.get(error, 'error.output.statusCode') === 401) {
+      return error
+    }
     return false
   }
 }
@@ -40,7 +42,7 @@ export function* renewSessionEffect() {
   const url = 'users/renew'
   try {
     const token = yield select(selectors.auth.getToken)
-    const request = authenticatedPostRequest(token)
+    const request = yield call(authenticatedPostRequest, token)
     const { expired_at } = yield call(request, url)
     return { token, expired_at }
   } catch (error) {
@@ -73,13 +75,14 @@ export function* loginFlow ({ payload }) {
   // the wait is over
   yield put(actions.loginRequestDone())
 
-  if (winner.login === false) {
-    // loginEffect returned false due to wrong credentials or network/server error
-    yield put(actions.loginError())
-  }
   if (winner.login) {
-    // login won the race and was successful
-    yield put(actions.loginSuccess(winner.login))
+    const { error } = winner.login
+    if (error) {
+      yield put(actions.loginError(error))
+    } else {
+      // login won the race and was successful
+      yield put(actions.loginSuccess(winner.login))
+    }
   } else if (winner.logout) {
     // we were interrupted by a `types.LOGOUT`
     yield call(logoutEffect)
