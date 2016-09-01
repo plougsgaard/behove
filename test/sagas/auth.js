@@ -3,7 +3,7 @@ import { take, put, race, call } from 'redux-saga/effects'
 import _ from 'lodash'
 
 import { types, actions } from '../../src/reducers/auth'
-import { loginEffect, logoutEffect, loginFlow, makeDigest } from '../../src/sagas/auth'
+import rootSaga, { loginEffect, logoutEffect, loginFlow, makeDigest } from '../../src/sagas/auth'
 import { postRequest } from '../../src/services/network'
 
 const email = 'a@a.a'
@@ -57,15 +57,11 @@ test.todo('loginEffect can be interrupted by logout')
 //  ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
 
 test('loginFlow succeeds', (t) => {
-  const generator = loginFlow()
+  const generator = loginFlow(actions.loginRequest(credentials))
 
   // start generator, run till first yield, give yielded value back
   // the value is this cause it says so in the code
   let next = generator.next()
-  t.deepEqual(next.value, take(types.LOGIN_REQUEST))
-
-  // pass in the value to the first yield expression
-  next = generator.next(actions.loginRequest(credentials))
   t.deepEqual(next.value, put(actions.loginRequestWaiting()))
 
   // the next yielded value is a race
@@ -82,23 +78,19 @@ test('loginFlow succeeds', (t) => {
   next = generator.next()
   t.deepEqual(next.value, put(actions.loginSuccess(loginSuccessValue)))
 
-  // and the loop continues from the beginning
+  // and we're done
   next = generator.next()
-  t.deepEqual(next.value, take(types.LOGIN_REQUEST))
+  t.true(next.done)
 })
 
 test.todo('loginFlow encounters server error')
 
 test('loginFlow is interrupted by logout', (t) => {
-  const generator = loginFlow()
+  const generator = loginFlow(actions.loginRequest(credentials))
 
   // start generator, run till first yield, give yielded value back
   // the value is this cause it says so in the code
   let next = generator.next()
-  t.deepEqual(next.value, take(types.LOGIN_REQUEST))
-
-  // pass in the value to the first yield expression
-  next = generator.next(actions.loginRequest(credentials))
   t.deepEqual(next.value, put(actions.loginRequestWaiting()))
 
   // the next yielded value is a race
@@ -112,9 +104,9 @@ test('loginFlow is interrupted by logout', (t) => {
   next = generator.next()
   t.deepEqual(next.value, call(logoutEffect))
 
-  // and the loop continues from the beginning
+  // and we're done
   next = generator.next()
-  t.deepEqual(next.value, take(types.LOGIN_REQUEST))
+  t.true(next.done)
 })
 
 test.todo('logoutFlow works')

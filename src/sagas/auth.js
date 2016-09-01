@@ -59,49 +59,43 @@ export function* renewSessionEffect() {
 //  ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
 
 /**
- * Describes login flow.
+ * takeLatest(types.LOGIN_REQUEST, loginFlow)
  */
-export function* loginFlow () {
-  while (true) {
-    const { payload } = yield take(types.LOGIN_REQUEST)
-    // let everyone know we are waiting for something
-    yield put(actions.loginRequestWaiting())
-    // branch out to let `loginEffect` handle the messy network stuff
-    // if we see a `types.LOGOUT` that takes priority
-    const winner = yield race({
-      login: call(loginEffect, payload),
-      logout: take(types.LOGOUT)
-    })
-    // the wait is over
-    yield put(actions.loginRequestDone())
+export function* loginFlow ({ payload }) {
+  // let everyone know we are waiting for something
+  yield put(actions.loginRequestWaiting())
+  // branch out to let `loginEffect` handle the messy network stuff
+  // if we see a `types.LOGOUT` that takes priority
+  const winner = yield race({
+    login: call(loginEffect, payload),
+    logout: take(types.LOGOUT)
+  })
+  // the wait is over
+  yield put(actions.loginRequestDone())
 
-    if (winner.login === false) {
-      // loginEffect returned false due to wrong credentials or network/server error
-      continue
-    }
-    if (winner.login) {
-      // login won the race and was successful
-      yield put(actions.loginSuccess(winner.login))
-    } else if (winner.logout) {
-      // we were interrupted by a `types.LOGOUT`
-      yield call(logoutEffect)
-    }
+  if (winner.login === false) {
+    // loginEffect returned false due to wrong credentials or network/server error
+    yield put(actions.loginError())
   }
-}
-
-/**
- * Describes logout flow.
- *
- * Listen for types.LOGOUT
- */
-export function* logoutFlow () {
-  // demonize
-  while (true) {
-    yield take(types.LOGOUT)
+  if (winner.login) {
+    // login won the race and was successful
+    yield put(actions.loginSuccess(winner.login))
+  } else if (winner.logout) {
+    // we were interrupted by a `types.LOGOUT`
     yield call(logoutEffect)
   }
 }
 
+/**
+ * takeLatest(types.LOGOUT, logoutFlow)
+ */
+export function* logoutFlow () {
+  yield call(logoutEffect)
+}
+
+/**
+ * takeLatest(types.RENEW_SESSION_REQUEST, renewSessionFlow)
+ */
 export function* renewSessionFlow () {
   const answer = yield call(renewSessionEffect)
   if (answer) {
@@ -118,8 +112,8 @@ export function* renewSessionFlow () {
 
 export default function* rootSaga () {
   yield [
-    loginFlow(),
-    logoutFlow(),
-    takeLatest(types.RENEW_SESSION_REQUEST, renewSessionFlow)
+    call(takeLatest, types.LOGIN_REQUEST, loginFlow),
+    call(takeLatest, types.LOGOUT, logoutFlow),
+    call(takeLatest, types.RENEW_SESSION_REQUEST, renewSessionFlow)
   ]
 }

@@ -69,7 +69,7 @@ export default function reducer (state = initialState, action = {}) {
       return {
         ...state,
         ...noToken,
-        error: action.payload.error
+        error: action.payload.error || true
       }
     case types.RENEW_SESSION_REQUEST:
       return state
