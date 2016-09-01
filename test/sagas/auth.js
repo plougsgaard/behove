@@ -1,10 +1,11 @@
 import test from 'ava'
-import { take, put, race, call } from 'redux-saga/effects'
+import { select, take, put, race, call } from 'redux-saga/effects'
 import _ from 'lodash'
 
+import { selectors } from '../../src/reducers'
 import { types, actions } from '../../src/reducers/auth'
-import rootSaga, { loginEffect, logoutEffect, loginFlow, makeDigest } from '../../src/sagas/auth'
-import { postRequest } from '../../src/services/network'
+import rootSaga, { loginEffect, renewSessionEffect, logoutEffect, loginFlow, makeDigest } from '../../src/sagas/auth'
+import { postRequest, authenticatedPostRequest } from '../../src/services/network'
 
 const email = 'a@a.a'
 const password = 'secret'
@@ -33,21 +34,93 @@ test('loginEffect can succeed', (t) => {
   t.true(next.done)
 })
 
-test('loginEffect can fail', (t) => {
+test('loginEffect can fail with unauthorized', (t) => {
   const generator = loginEffect(credentials)
 
   let next = generator.next()
   t.deepEqual(next.value, call(postRequest, 'auth/login', body))
 
-  next = generator.throw('error')
-  t.deepEqual(next.value, put(actions.loginError('error')))
+  const authError = { error: { output: { statusCode: 401 } } }
 
-  next = generator.next()
+  next = generator.throw(authError)
+  t.deepEqual(next.value, authError)
+  t.true(next.done)
+})
+
+test('loginEffect can fail with unknown error', (t) => {
+  const generator = loginEffect(credentials)
+
+  let next = generator.next()
+  t.deepEqual(next.value, call(postRequest, 'auth/login', body))
+
+  const authError = { error: { output: { statusCode: 404 } } }
+
+  next = generator.throw(authError)
   t.false(next.value)
   t.true(next.done)
 })
 
-test.todo('loginEffect can be interrupted by logout')
+test('renewSessionEffect can succeed', (t) => {
+  const generator = renewSessionEffect()
+
+  let next = generator.next()
+  t.deepEqual(next.value, select(selectors.auth.getToken))
+
+  const token = 'abc'
+  next = generator.next(token)
+  t.deepEqual(next.value, call(authenticatedPostRequest, token))
+
+  const request = authenticatedPostRequest(token)
+  next = generator.next(request)
+  t.deepEqual(next.value, call(request, 'users/renew'))
+
+  const result = { token, expired_at: 1472756086596 }
+  next = generator.next(result)
+  t.deepEqual(next.value, result)
+  t.true(next.done)
+})
+
+test('renewSessionEffect can fail with unauthorized', (t) => {
+  const generator = renewSessionEffect()
+
+  let next = generator.next()
+  t.deepEqual(next.value, select(selectors.auth.getToken))
+
+  const token = 'some_unauthed_token'
+  next = generator.next(token)
+  t.deepEqual(next.value, call(authenticatedPostRequest, token))
+
+  const request = authenticatedPostRequest(token)
+  next = generator.next(request)
+  t.deepEqual(next.value, call(request, 'users/renew'))
+
+  const authError = { error: { output: { statusCode: 401 } } }
+
+  next = generator.throw(authError)
+  t.deepEqual(next.value, authError)
+  t.true(next.done)
+})
+
+test('renewSessionEffect can fail with unknown error', (t) => {
+  const generator = renewSessionEffect()
+
+  let next = generator.next()
+  t.deepEqual(next.value, select(selectors.auth.getToken))
+
+  const token = 'some_unauthed_token'
+  next = generator.next(token)
+  t.deepEqual(next.value, call(authenticatedPostRequest, token))
+
+  const request = authenticatedPostRequest(token)
+  next = generator.next(request)
+  t.deepEqual(next.value, call(request, 'users/renew'))
+
+  const authError = { error: { output: { statusCode: 404 } } }
+
+  next = generator.throw(authError)
+  t.false(next.value)
+  t.true(next.done)
+})
 
 //  ███████╗ █████╗  ██████╗  █████╗ ███████╗
 //  ██╔════╝██╔══██╗██╔════╝ ██╔══██╗██╔════╝
