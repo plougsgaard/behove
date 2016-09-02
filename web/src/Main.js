@@ -2,10 +2,7 @@ import React from 'react'
 
 import { connect } from 'react-redux'
 
-import { delay } from 'redux-saga'
-
 import { actions } from './app/reducers/auth'
-import { postRequest } from './app/services/network'
 
 import { selectors } from './app/reducers'
 

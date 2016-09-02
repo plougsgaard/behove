@@ -1,5 +1,5 @@
 import { postRequest, authenticatedPostRequest } from '../services/network'
-import { takeLatest, delay } from 'redux-saga'
+import { takeLatest } from 'redux-saga'
 import { select, take, put, call, race } from 'redux-saga/effects'
 import sha256 from 'crypto-js/sha256'
 import _ from 'lodash'
@@ -16,7 +16,7 @@ export const makeDigest = ({ email, password }) => sha256(`${email}${password}`)
 //  ███████╗██║     ██║     ███████╗╚██████╗   ██║   ███████║
 //  ╚══════╝╚═╝     ╚═╝     ╚══════╝ ╚═════╝   ╚═╝   ╚══════╝
 
-export function* loginEffect({ email, password }) {
+export function* loginEffect ({ email, password }) {
   const digest = makeDigest({ email, password })
   const url = 'auth/login'
   const body = {
@@ -34,11 +34,11 @@ export function* loginEffect({ email, password }) {
   }
 }
 
-export function* logoutEffect() {
+export function* logoutEffect () {
 
 }
 
-export function* renewSessionEffect() {
+export function* renewSessionEffect () {
   const url = 'users/renew'
   try {
     const token = yield select(selectors.auth.getToken)
@@ -106,7 +106,7 @@ export function* renewSessionFlow () {
     if (error) {
       yield put(actions.logout())
     } else {
-      yield put(actions.renewSessionSuccess(answer))
+      yield put(actions.renewSessionSuccess({ token, expired_at }))
     }
   } else {
     // we got an unexpected answer => no appropriate action

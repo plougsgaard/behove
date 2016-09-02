@@ -20,7 +20,7 @@ export const actions = {
   loginError: createAction(types.LOGIN_ERROR, (p) => _.pick(p, ['error'])),
   logout: createAction(types.LOGOUT, (p) => undefined),
   renewSessionRequest: createAction(types.RENEW_SESSION_REQUEST, (p) => undefined),
-  renewSessionSuccess: createAction(types.RENEW_SESSION_SUCCESS, (p) => _.pick(p, ['token', 'expired_at'])),
+  renewSessionSuccess: createAction(types.RENEW_SESSION_SUCCESS, (p) => _.pick(p, ['token', 'expired_at']))
 }
 
 export const selectors = {

@@ -14,7 +14,7 @@ const wrapFetch = async (url, options) => {
   if (response.ok) {
     return json
   }
-  throw { error: json }
+  throw Error({ error: json })
 }
 
 const decoratePath = (url) => `${PATH_API_BASE}/${url}`
@@ -31,7 +31,7 @@ const decorateOptions = (method = 'get', body, headers) => ({
     ...headers,
     'Content-Type': 'application/json'
   },
-  ...( body ? { body: JSON.stringify(body) } : {})
+  ...(body ? { body: JSON.stringify(body) } : {})
 })
 
 export const getRequest = async (url, body, headers) =>
