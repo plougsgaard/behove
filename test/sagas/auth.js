@@ -17,6 +17,12 @@ const loginRace = {
   logout: take(types.LOGOUT)
 }
 
+const errorUnauthorized = {
+  error: 'Unauthorized',
+  message: '(╯°□°）╯︵ ┻━┻',
+  status: 401
+}
+
 //  ███████╗███████╗███████╗███████╗ ██████╗████████╗███████╗
 //  ██╔════╝██╔════╝██╔════╝██╔════╝██╔════╝╚══██╔══╝██╔════╝
 //  █████╗  █████╗  █████╗  █████╗  ██║        ██║   ███████╗
@@ -30,7 +36,7 @@ test('loginEffect can succeed', (t) => {
   let next = generator.next()
   t.deepEqual(next.value, call(postRequest, 'auth/login', body))
 
-  next = generator.next()
+  next = generator.next({ token: '123' })
   t.true(next.done)
 })
 
@@ -40,23 +46,8 @@ test('loginEffect can fail with unauthorized', (t) => {
   let next = generator.next()
   t.deepEqual(next.value, call(postRequest, 'auth/login', body))
 
-  const authError = { error: { output: { statusCode: 401 } } }
-
-  next = generator.throw(authError)
-  t.deepEqual(next.value, authError)
-  t.true(next.done)
-})
-
-test('loginEffect can fail with unknown error', (t) => {
-  const generator = loginEffect(credentials)
-
-  let next = generator.next()
-  t.deepEqual(next.value, call(postRequest, 'auth/login', body))
-
-  const authError = { error: { output: { statusCode: 404 } } }
-
-  next = generator.throw(authError)
-  t.false(next.value)
+  next = generator.next({ error: errorUnauthorized })
+  t.deepEqual(next.value, { error: errorUnauthorized })
   t.true(next.done)
 })
 
@@ -94,31 +85,8 @@ test('renewSessionEffect can fail with unauthorized', (t) => {
   next = generator.next(request)
   t.deepEqual(next.value, call(request, 'users/renew'))
 
-  const authError = { error: { output: { statusCode: 401 } } }
-
-  next = generator.throw(authError)
-  t.deepEqual(next.value, authError)
-  t.true(next.done)
-})
-
-test('renewSessionEffect can fail with unknown error', (t) => {
-  const generator = renewSessionEffect()
-
-  let next = generator.next()
-  t.deepEqual(next.value, select(selectors.auth.getToken))
-
-  const token = 'some_unauthed_token'
-  next = generator.next(token)
-  t.deepEqual(next.value, call(authenticatedPostRequest, token))
-
-  const request = authenticatedPostRequest(token)
-  next = generator.next(request)
-  t.deepEqual(next.value, call(request, 'users/renew'))
-
-  const authError = { error: { output: { statusCode: 404 } } }
-
-  next = generator.throw(authError)
-  t.false(next.value)
+  next = generator.next({ error: errorUnauthorized })
+  t.deepEqual(next.value, { error: errorUnauthorized })
   t.true(next.done)
 })
 
@@ -145,16 +113,11 @@ test('loginFlow succeeds', (t) => {
   const generator = loginFlow(actions.loginRequest(credentials))
 
   // run the iterator to the first yield clause
-  let next = generator.next()
-  // the value yielded should be this
-  t.deepEqual(next.value, put(actions.loginRequestWaiting()))
-
-  // supply the value (none) given to the first yield clause
   next = generator.next()
-  // now the iterator is at the second yield clause which is a race
+  // now the iterator is at the first yield clause which is a race
   t.deepEqual(next.value, race(loginRace))
 
-  // supply outcome of the second yield clause (successful login)
+  // supply outcome of the first yield clause (successful login)
   next = generator.next({ login: { token: 'abc' } })
   t.deepEqual(next.value, put(actions.loginRequestDone()))
 
@@ -172,19 +135,16 @@ test('loginFlow succeeds', (t) => {
 test('loginFlow encounters unauthorized error', (t) => {
   const generator = loginFlow(actions.loginRequest(credentials))
 
-  let next = generator.next()
-  t.deepEqual(next.value, put(actions.loginRequestWaiting()))
-
   next = generator.next()
   t.deepEqual(next.value, race(loginRace))
 
   // supply outcome of the second yield clause (an erroneous login)
-  const errorObject = { error: { error: 'terrible-error' } }
+  const errorObject = { error: errorUnauthorized }
   next = generator.next({ login: errorObject })
   t.deepEqual(next.value, put(actions.loginRequestDone()))
 
   next = generator.next()
-  t.deepEqual(next.value, put(actions.loginError(errorObject.error)))
+  t.deepEqual(next.value, put(actions.loginError(errorObject)))
 
   next = generator.next()
   t.true(next.done)
@@ -193,12 +153,7 @@ test('loginFlow encounters unauthorized error', (t) => {
 test('loginFlow is interrupted by logout', (t) => {
   const generator = loginFlow(actions.loginRequest(credentials))
 
-  // start generator, run till first yield, give yielded value back
-  // the value is this cause it says so in the code
-  let next = generator.next()
-  t.deepEqual(next.value, put(actions.loginRequestWaiting()))
-
-  // the next yielded value is a race
+  // the first yielded value is a race
   next = generator.next()
   t.deepEqual(next.value, race(loginRace))
 

@@ -14,7 +14,7 @@ const wrapFetch = async (url, options) => {
   if (response.ok) {
     return json
   }
-  throw Error({ error: json })
+  return { error: json }
 }
 
 const decoratePath = (url) => `${PATH_API_BASE}/${url}`

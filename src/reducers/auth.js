@@ -3,10 +3,9 @@ import { createAction } from 'redux-actions'
 
 export const types = {
   LOGIN_REQUEST: 'auth/LOGIN_REQUEST',
-  LOGIN_REQUEST_WAITING: 'auth/LOGIN_REQUEST_WAITING',
-  LOGIN_REQUEST_DONE: 'auth/LOGIN_REQUEST_DONE',
   LOGIN_SUCCESS: 'auth/LOGIN_SUCCESS',
   LOGIN_ERROR: 'auth/LOGIN_ERROR',
+  LOGIN_REQUEST_DONE: 'auth/LOGIN_REQUEST_DONE',
   LOGOUT: 'auth/LOGOUT',
   RENEW_SESSION_REQUEST: 'auth/RENEW_SESSION_REQUEST',
   RENEW_SESSION_SUCCESS: 'auth/RENEW_SESSION_SUCCESS'
@@ -14,7 +13,6 @@ export const types = {
 
 export const actions = {
   loginRequest: createAction(types.LOGIN_REQUEST, (p) => _.pick(p, ['email', 'password'])),
-  loginRequestWaiting: createAction(types.LOGIN_REQUEST_WAITING, (p) => undefined),
   loginRequestDone: createAction(types.LOGIN_REQUEST_DONE, (p) => undefined),
   loginSuccess: createAction(types.LOGIN_SUCCESS, (p) => _.pick(p, ['token'])),
   loginError: createAction(types.LOGIN_ERROR, (p) => _.pick(p, ['error'])),
@@ -41,11 +39,7 @@ export default function reducer (state = initialState, action = {}) {
     case types.LOGIN_REQUEST:
       return {
         ...state,
-        ...noToken
-      }
-    case types.LOGIN_REQUEST_WAITING:
-      return {
-        ...state,
+        ...noToken,
         loginRequestWaiting: true
       }
     case types.LOGIN_REQUEST_DONE:
