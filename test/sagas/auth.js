@@ -129,34 +129,66 @@ test('renewSessionEffect can fail with unknown error', (t) => {
 //  ███████║██║  ██║╚██████╔╝██║  ██║███████║
 //  ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
 
+/**
+ * Test the loginFlow saga effect
+ *
+ * I've chosen this as the example on how to test generator functions.
+ *
+ * The general flow is like this. Each `next` advances the iterator
+ * to the following `yield` clause. The subsequent `next` supplies our
+ * own value to the entire `yield` clause and advances the iterator to
+ * the next one.
+ */
 test('loginFlow succeeds', (t) => {
+  // make an iterator from the generator function and supply it
+  // with some arguments (clever way of packaging the 'payload')
   const generator = loginFlow(actions.loginRequest(credentials))
 
-  // start generator, run till first yield, give yielded value back
-  // the value is this cause it says so in the code
+  // run the iterator to the first yield clause
   let next = generator.next()
+  // the value yielded should be this
   t.deepEqual(next.value, put(actions.loginRequestWaiting()))
 
-  // the next yielded value is a race
+  // supply the value (none) given to the first yield clause
   next = generator.next()
+  // now the iterator is at the second yield clause which is a race
   t.deepEqual(next.value, race(loginRace))
 
-  // pass the winner of the race to the second third expression
-  // also remember `next.value.login` since we'll need it shortly
-  next = generator.next(_.pick(loginRace, 'login'))
-  const loginSuccessValue = next.value.login
+  // supply outcome of the second yield clause (successful login)
+  next = generator.next({ login: { token: 'abc' } })
   t.deepEqual(next.value, put(actions.loginRequestDone()))
 
-  // here's where we need that `next.value.login` from earlier
+  // the next yield (the `loginRequestDone` doesn't need a value
   next = generator.next()
-  t.deepEqual(next.value, put(actions.loginSuccess(loginSuccessValue)))
+  // the yielded value is the `loginSuccess` with the earlier arguments
+  t.deepEqual(next.value, put(actions.loginSuccess({ token: 'abc' })))
 
-  // and we're done
+  // advance the iterator past the last yield
   next = generator.next()
+  // the function is done for now
   t.true(next.done)
 })
 
-test.todo('loginFlow encounters server error')
+test('loginFlow encounters unauthorized error', (t) => {
+  const generator = loginFlow(actions.loginRequest(credentials))
+
+  let next = generator.next()
+  t.deepEqual(next.value, put(actions.loginRequestWaiting()))
+
+  next = generator.next()
+  t.deepEqual(next.value, race(loginRace))
+
+  // supply outcome of the second yield clause (an erroneous login)
+  const errorObject = { error: { error: 'terrible-error' } }
+  next = generator.next({ login: errorObject })
+  t.deepEqual(next.value, put(actions.loginRequestDone()))
+
+  next = generator.next()
+  t.deepEqual(next.value, put(actions.loginError(errorObject.error)))
+
+  next = generator.next()
+  t.true(next.done)
+})
 
 test('loginFlow is interrupted by logout', (t) => {
   const generator = loginFlow(actions.loginRequest(credentials))
