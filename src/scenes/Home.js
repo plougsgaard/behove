@@ -8,28 +8,37 @@ import { images, metrics } from '../theme'
 
 import { actions as authActions } from '../reducers/auth'
 
-const onLogin = (payload, dispatch) => () => dispatch(loginRequest(payload))
+const onLogin = (payload, dispatch) => () => dispatch(authActions.loginRequest(payload))
 
-const HomeScene = ({ dispatch, numbers }) => (
+const HomeScene = ({ dispatch, auth }) => (
   <CardContainer>
-    <CardItem
-      actionComponent={'Login'}
-      actionPress={NavigationActions.settings}
-    >
-      You are currently in offline mode. That means no changes can be made.
-      If you would like to do things, please login or sign up!
-    </CardItem>
+    {auth.token === null && (
+      <CardItem
+        actionComponent={'Login'}
+        actionPress={onLogin({ email: 'a@a.a', password: 'secret' }, dispatch)}
+      >
+        You are currently in offline mode. That means no changes can be made.
+        If you would like to do things, please login or sign up!
+      </CardItem>
+    )}
     <CardItem
       style={{ marginTop: metrics.baseMargin }}
       imageSource={images.backgrounds.noodles}
-      actionComponent={'Go to settings'}
-      actionPress={NavigationActions.settings}
+      actionComponent={'Scan'}
+      actionPress={NavigationActions.scan}
     >
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sagittis pellentesque lacus eleifend lacinia...
+      Is your mouth tiny and small? Get on down to scanning some food. Lil bits!
     </CardItem>
+    {auth.token !== null && (
+      <CardItem
+        style={{ marginTop: metrics.baseMargin }}
+      >
+        Placeholder for list of items added.
+      </CardItem>
+    )}
   </CardContainer>
 )
 
-const mapStateToProps = ({ numbers }) => ({ numbers })
+const mapStateToProps = ({ auth }) => ({ auth })
 
 export default connect(mapStateToProps)(HomeScene)

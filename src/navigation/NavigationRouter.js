@@ -9,6 +9,7 @@ import BackButton from './BackButton'
 import HomeScene from '../scenes/Home'
 import ProfileScene from '../scenes/Profile'
 import SettingsScene from '../scenes/Settings'
+import ScanScene from '../scenes/Scan'
 
 const getSceneStyle = (/* NavigationSceneRendererProps */ props, computedProps) => {
   const style = {
@@ -45,9 +46,31 @@ class NavigationRouter extends Component {
             leftButtonIconStyle={styles.leftButton}
             rightButtonTextStyle={styles.rightButton}
           >
-            <Scene key='home' component={HomeScene} title='Home' initial renderBackButton={MenuButton} type={ActionConst.RESET} />
-            <Scene key='profile' component={ProfileScene} title='Profile' hideNavBar />
-            <Scene key='settings' component={SettingsScene} renderBackButton={MenuButton} type={ActionConst.RESET} title='Settings' />
+            <Scene
+              key='home'
+              component={HomeScene}
+              title='Home'
+              initial
+              renderBackButton={MenuButton}
+              type={ActionConst.RESET} />
+            <Scene
+              key='profile'
+              component={ProfileScene}
+              title='Profile'
+              renderBackButton={MenuButton}
+              type={ActionConst.RESET} />
+            <Scene
+              key='scan'
+              component={ScanScene}
+              title='Scan'
+              renderBackButton={MenuButton}
+              type={ActionConst.RESET} />
+            <Scene
+              key='settings'
+              component={SettingsScene}
+              title='Settings'
+              renderBackButton={MenuButton}
+              type={ActionConst.RESET} />
           </Scene>
         </Scene>
       </Router>
