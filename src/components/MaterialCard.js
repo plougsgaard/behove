@@ -33,7 +33,7 @@ export const CardItem = ({
       </TouchableOpacity>)}
     {actionComponent && (
       <TouchableOpacity style={styles.cardActionStyle} onPress={actionPress}>
-        {wrap(actionComponent)}
+        {wrap(typeof actionComponent === 'string' ? actionComponent.toUpperCase() : actionComponent, styles.cardActionTextStyle)}
       </TouchableOpacity>)}
   </View>
 )

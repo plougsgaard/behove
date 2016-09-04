@@ -45,7 +45,8 @@ export const colors = {
   snow: '#FFFFFF',
   panther: '#161616',
   charcoal: '#595959',
-  coal: '#2d2d2d'
+  coal: '#2d2d2d',
+  link: '#2196F3'
 }
 
 /**
@@ -55,6 +56,7 @@ export const colors = {
  */
 export const images = {
   backgrounds: {
-    berries: require('../../img/berries.jpg')
+    berries: require('../../img/berries.jpg'),
+    noodles: require('../../img/noodles.jpg')
   }
 }

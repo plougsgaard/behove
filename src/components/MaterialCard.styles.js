@@ -46,6 +46,10 @@ export default StyleSheet.create({
     borderTopWidth: 1,
     padding: 15
   },
+  cardActionTextStyle: {
+    color: colors.link,
+    fontWeight: '600'
+  },
   cardMenuStyle: {
     position: 'absolute',
     top: metrics.doubleBasePadding,
