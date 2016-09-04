@@ -22,10 +22,10 @@ export function* loginEffect ({ email, password }) {
     email,
     digest
   }
-  const { error, token } = yield call(postRequest, url, body)
+  const { error, ...loginResponse } = yield call(postRequest, url, body)
   return error
     ? { error }
-    : { token }
+    : { ...loginResponse }
 }
 
 export function* logoutEffect () {
@@ -61,11 +61,11 @@ export function* loginFlow ({ payload }) {
   yield put(actions.loginRequestDone())
 
   if (first.login) {
-    const { error, token } = first.login
+    const { error, ...loginResponse } = first.login
     if (error) {
       yield put(actions.loginError({ error }))
     } else {
-      yield put(actions.loginSuccess({ token }))
+      yield put(actions.loginSuccess({ ...loginResponse }))
     }
   } else if (first.logout) {
     yield call(logoutEffect)

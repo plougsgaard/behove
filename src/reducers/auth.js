@@ -14,7 +14,7 @@ export const types = {
 export const actions = {
   loginRequest: createAction(types.LOGIN_REQUEST, (p) => _.pick(p, ['email', 'password'])),
   loginRequestDone: createAction(types.LOGIN_REQUEST_DONE, (p) => undefined),
-  loginSuccess: createAction(types.LOGIN_SUCCESS, (p) => _.pick(p, ['token'])),
+  loginSuccess: createAction(types.LOGIN_SUCCESS, (p) => _.pick(p, ['token', 'expired_at'])),
   loginError: createAction(types.LOGIN_ERROR, (p) => _.pick(p, ['error'])),
   logout: createAction(types.LOGOUT, (p) => undefined),
   renewSessionRequest: createAction(types.RENEW_SESSION_REQUEST, (p) => undefined),
@@ -51,6 +51,7 @@ export default function reducer (state = initialState, action = {}) {
       return {
         ...state,
         token: action.payload.token,
+        tokenExpiredAt: action.payload.expired_at,
         error: null
       }
     case types.LOGOUT:

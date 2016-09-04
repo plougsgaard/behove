@@ -24,7 +24,7 @@ test('loginRequest action payload', (t) => {
 })
 
 test('loginSuccess action payload', (t) => {
-  const payload = { token: '1234' }
+  const payload = { token: '1234', expired_at: 1475407251040 }
   const payloadInput = { ...payload }
   const payloadInputWithExtraKeys = { ...payload, password: 'foobar' }
   t.deepEqual(
