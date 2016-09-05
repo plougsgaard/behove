@@ -7,7 +7,7 @@ export default StyleSheet.create({
       flex: 1,
       alignItems: 'flex-start',
       justifyContent: 'center',
-      marginTop: metrics.doubleBaseMargin,
+      marginTop: metrics.baseMargin / 2,
       marginLeft: metrics.baseMargin,
       width: metrics.icons.medium
     },
