@@ -13,6 +13,19 @@ const store = configureStore({
 
 const Root = React.createClass({
   displayName: 'Root',
+  getChildContext: function () {
+    return {
+      baseTheme: {
+        color: {
+          danger: '#FF0000',
+          success: '#2FFF01',
+        }
+      }
+    }
+  },
+  childContextTypes: {
+    baseTheme: PropTypes.object.isRequired
+  },
   render: function () {
     return (
       <Provider store={store}>

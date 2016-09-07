@@ -7,6 +7,8 @@ import { Actions as NavigationActions } from 'react-native-router-flux'
 import { CardItem, CardContainer } from '../components/MaterialCard'
 import { images, metrics } from '../theme'
 
+import Heading from '../base/Heading'
+
 const MyInputPleaseRenameMe = ({ label, unit = 'g' }) => (
   <View style={{ flex: 4, flexDirection: 'row', padding: metrics.baseMargin }}>
     <View
@@ -64,6 +66,11 @@ const MyInputPleaseRenameMe = ({ label, unit = 'g' }) => (
 const ScanScene = ({ dispatch, auth }) => (
   <CardContainer>
     <CardItem>
+      <Heading level={1}>Heading</Heading>
+      <Heading level={2}>Heading</Heading>
+      <Heading level={3}>Heading</Heading>
+      <Heading level={4}>Heading</Heading>
+      <Heading level={5}>Heading</Heading>
       <MyInputPleaseRenameMe label={'Calories'} unit='kcal' />
       <MyInputPleaseRenameMe label={'Carbs'} />
       <MyInputPleaseRenameMe label={'Sugar'} />
