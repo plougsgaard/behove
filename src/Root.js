@@ -15,8 +15,9 @@ const Root = React.createClass({
   displayName: 'Root',
   getChildContext: function () {
     return {
-      baseTheme: {
-        color: {
+      customTheme: {
+        colors: {
+          // default: 'maroon',
           danger: '#FF0000',
           success: '#2FFF01',
         }
@@ -24,7 +25,7 @@ const Root = React.createClass({
     }
   },
   childContextTypes: {
-    baseTheme: PropTypes.object.isRequired
+    customTheme: PropTypes.object.isRequired
   },
   render: function () {
     return (

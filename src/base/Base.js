@@ -1,30 +1,44 @@
-import React, { PropTypes } from 'react'
+import React, { Component, PropTypes } from 'react'
+import PureRenderMixin from 'react-addons-pure-render-mixin'
 import { View, Text } from 'react-native'
 
-export const wrapStringInText = (s) => (
-  typeof s === 'string'
-    ? <Text>{s}</Text>
-    : s
-)
+import baseTheme from './baseTheme'
 
-const Base = React.createClass({
-  render: function () {
-    const { baseStyle, children } = this.props
-    const { baseTheme } = this.context
+class Base extends Component {
+  constructor (props, context) {
+    super(props, context)
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this)
+  }
+  render () {
+    const { viewStyle, baseStyle, children } = this.props
+    const { customTheme } = this.context
+
+    const { colors } = { ...baseTheme, ...customTheme }
+
     return (
-      <Text style={{
-        ...baseStyle
-      }}>{children}</Text>
+      <View style={{
+        ...viewStyle
+      }}>
+        <Text style={{
+          color: colors.default,
+          ...baseStyle
+        }}>{children}</Text>
+      </View>
     )
   }
-})
+}
 
 Base.propTypes = {
-  children: PropTypes.any
+  children: PropTypes.any,
+  baseStyle: PropTypes.object
+}
+
+Base.defaultProps = {
+  flex: 1
 }
 
 Base.contextTypes = {
-  baseTheme: PropTypes.object.isRequired
+  customTheme: PropTypes.object.isRequired
 }
 
 export default Base

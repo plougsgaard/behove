@@ -66,9 +66,9 @@ const MyInputPleaseRenameMe = ({ label, unit = 'g' }) => (
 const ScanScene = ({ dispatch, auth }) => (
   <CardContainer>
     <CardItem>
-      <Heading level={1}>Heading</Heading>
+      <Heading level={1} alignCenter>Heading</Heading>
       <Heading level={2}>Heading</Heading>
-      <Heading level={3}>Heading</Heading>
+      <Heading level={3} alignCenter>Heading</Heading>
       <Heading level={4}>Heading</Heading>
       <Heading level={5}>Heading</Heading>
       <MyInputPleaseRenameMe label={'Calories'} unit='kcal' />
