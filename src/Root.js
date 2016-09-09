@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react'
-import { AppRegistry } from 'react-native'
-import { View, StatusBar } from 'react-native'
+import { AppRegistry, View, StatusBar } from 'react-native'
 import { Provider } from 'react-redux'
 import configureStore from './redux/store'
 import styles from './Root.styles.js'
@@ -19,7 +18,7 @@ const Root = React.createClass({
         colors: {
           // default: 'maroon',
           danger: '#FF0000',
-          success: '#2FFF01',
+          success: '#2FFF01'
         }
       }
     }

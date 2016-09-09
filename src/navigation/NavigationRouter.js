@@ -50,7 +50,7 @@ class NavigationRouter extends Component {
               key='home'
               component={HomeScene}
               title='Home'
-              initial
+              // initial
               renderBackButton={MenuButton}
               type={ActionConst.RESET} />
             <Scene
@@ -60,6 +60,7 @@ class NavigationRouter extends Component {
               renderBackButton={MenuButton}
               type={ActionConst.RESET} />
             <Scene
+              initial // temporary
               key='scan'
               component={ScanScene}
               title='Scan'

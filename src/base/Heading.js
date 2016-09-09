@@ -26,7 +26,7 @@ const Heading = ({
         alignItems,
         padding: basePadding
       }}
-      baseStyle={{
+      textStyle={{
         ...style,
         fontSize,
         fontWeight: boldSize

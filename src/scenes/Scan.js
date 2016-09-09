@@ -8,6 +8,7 @@ import { CardItem, CardContainer } from '../components/MaterialCard'
 import { images, metrics } from '../theme'
 
 import Heading from '../base/Heading'
+import Flex from '../base/Flex'
 
 const MyInputPleaseRenameMe = ({ label, unit = 'g' }) => (
   <View style={{ flex: 4, flexDirection: 'row', padding: metrics.baseMargin }}>
@@ -63,9 +64,33 @@ const MyInputPleaseRenameMe = ({ label, unit = 'g' }) => (
   </View>
 )
 
+const Refactored = ({ label, unit = 'g' }) => (
+  <Flex flex={4} row>
+    <Flex alignEnd style={{ backgroundColor: 'green', paddingRight: metrics.doubleBasePadding }}>{label}</Flex>
+    <Flex flex={2} style={{ backgroundColor: 'yellow' }}>
+      <TextInput
+        style={{
+          flex: 1,
+          backgroundColor: 'gray'
+        }}
+        autoCorrect={false}
+        keyboardType={'numeric'}
+        returnKeyType={'next'}
+        placeholder='Icon Textbox'/>
+    </Flex>
+    <Flex >
+      {unit}
+    </Flex>
+  </Flex>
+)
+
 const ScanScene = ({ dispatch, auth }) => (
   <CardContainer>
     <CardItem>
+      <Refactored label={'Calories'} unit={'kcal'} />
+      <Refactored label={'Carbs'} />
+      <Refactored label={'Sugar'} />
+      <Refactored label={'fat'} />
       <Heading level={1} alignCenter>Heading</Heading>
       <Heading level={2}>Heading</Heading>
       <Heading level={3} alignCenter>Heading</Heading>
