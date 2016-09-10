@@ -21,9 +21,14 @@ class Base extends PureComponent {
         }}>{children}</Text>
       )
 
+    const debugStyle = __DEV__ && 0
+      ? { borderColor: '#CCC', borderWidth: 0.5, borderStyle: 'dashed' }
+      : {}
+
     return (
       <View
         style={{
+          ...debugStyle,
           ...viewStyle
         }}
         children={childComponent} />

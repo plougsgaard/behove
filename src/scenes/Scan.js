@@ -10,76 +10,37 @@ import { images, metrics } from '../theme'
 import Heading from '../base/Heading'
 import Flex from '../base/Flex'
 
-const MyInputPleaseRenameMe = ({ label, unit = 'g' }) => (
-  <View style={{ flex: 4, flexDirection: 'row', padding: metrics.baseMargin }}>
-    <View
-      style={{
-        flex: 1,
-        alignItems: 'flex-end',
-        justifyContent: 'center',
-        // backgroundColor: '#eee',
-        paddingRight: metrics.baseMargin
-      }}>
-      <Text
-        style={{
-          height: 26,
-          flex: 1,
-          fontSize: 13,
-          padding: metrics.baseMargin / 2
-        }}>{label}</Text>
-    </View>
-    <View
-      style={{
-        flex: 2,
-        alignItems: 'flex-start',
-        justifyContent: 'center'
-      }}>
-      <TextInput
-        style={{
-          height: 26,
-          flex: 1,
-          fontSize: 14,
-          padding: metrics.baseMargin / 2
-        }}
-        autoCorrect={false}
-        keyboardType={'numeric'}
-        returnKeyType={'next'}
-        placeholder='Icon Textbox'/>
-    </View>
-    <View
-      style={{
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
-      <Text
-        style={{
-          height: 26,
-          flex: 1,
-          fontSize: 13,
-          color: '#aaa',
-          padding: metrics.baseMargin / 2
-        }}>{unit}</Text>
-    </View>
-  </View>
-)
+import { RNEFormLabel, RNEFormInput } from '../arne'
+
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+
+import TextField from 'react-native-md-textinput'
 
 const Refactored = ({ label, unit = 'g' }) => (
-  <Flex flex={4} row>
-    <Flex alignEnd style={{ backgroundColor: 'green', paddingRight: metrics.doubleBasePadding }}>{label}</Flex>
-    <Flex flex={2} style={{ backgroundColor: 'yellow' }}>
+  <Flex flex={7} row style={{ borderBottomWidth: 1, borderColor: '#CCC' }}>
+    <Flex flex={2} alignEnd justifyCenter  style={{ paddingRight: metrics.doubleBasePadding, height: 45 }}>{label}</Flex>
+    <View style={{
+      // backgroundColor: 'red',
+      // height: 45,
+      flex: 3,
+
+    }}>
       <TextInput
         style={{
-          flex: 1,
-          backgroundColor: 'gray'
+          height: 45,
+          fontSize: 16,
+          textAlign: 'center'
         }}
         autoCorrect={false}
         keyboardType={'numeric'}
         returnKeyType={'next'}
-        placeholder='Icon Textbox'/>
-    </Flex>
-    <Flex >
+        placeholder=''/>
+    </View>
+    <Flex flex={1} justifyCenter style={{ paddingLeft: metrics.doubleBasePadding, height: 45 }}>
       {unit}
+    </Flex>
+    <Flex flex={1} justifyCenter style={{ paddingLeft: metrics.doubleBasePadding, height: 45 }}>
+      <MaterialIcons name='keyboard-arrow-right' size={metrics.icons.medium} />
     </Flex>
   </Flex>
 )
@@ -87,21 +48,13 @@ const Refactored = ({ label, unit = 'g' }) => (
 const ScanScene = ({ dispatch, auth }) => (
   <CardContainer>
     <CardItem>
+      <Heading level={5} alignCenter>Nutrition</Heading>
       <Refactored label={'Calories'} unit={'kcal'} />
       <Refactored label={'Carbs'} />
       <Refactored label={'Sugar'} />
-      <Refactored label={'fat'} />
-      <Heading level={1} alignCenter>Heading</Heading>
-      <Heading level={2}>Heading</Heading>
-      <Heading level={3} alignCenter>Heading</Heading>
-      <Heading level={4}>Heading</Heading>
-      <Heading level={5}>Heading</Heading>
-      <MyInputPleaseRenameMe label={'Calories'} unit='kcal' />
-      <MyInputPleaseRenameMe label={'Carbs'} />
-      <MyInputPleaseRenameMe label={'Sugar'} />
-      <MyInputPleaseRenameMe label={'Fat'} />
-      <MyInputPleaseRenameMe label={'Saturated'} />
-      <MyInputPleaseRenameMe label={'Salt'} unit='mg' />
+      <Refactored label={'Fat'} />
+      <Refactored label={'Saturated'} />
+      <Refactored label={'Salt'} unit='mg' />
     </CardItem>
   </CardContainer>
 )
