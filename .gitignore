@@ -42,3 +42,6 @@ android/keystores/debug.keystore
 
 # ava
 .nyc_output
+
+# temporary playground
+src/arne
