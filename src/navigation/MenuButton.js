@@ -5,6 +5,7 @@ import { Actions as NavigationActions } from 'react-native-router-flux'
 
 import { colors, metrics } from '../theme'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import Icon from 'react-native-vector-icons/FontAwesome'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
 const openDrawer = () => {
@@ -22,10 +23,14 @@ const PlatformIcon = Platform.select({
     />
   ),
   android: () => (
+    // <MaterialIcons name='menu'
+    //   size={metrics.icons.medium}
+    //   color={colors.snow}
+    // />
     <MaterialIcons name='menu'
-      size={metrics.icons.medium}
-      color={colors.snow}
-    />
+          size={metrics.icons.medium}
+          color={colors.snow}
+        />
   )
 })
 

@@ -1,5 +1,5 @@
 import { Platform, StyleSheet } from 'react-native'
-import { metrics } from '../theme'
+import { metrics, colors } from '../theme'
 
 export default StyleSheet.create({
   navButtonLeft: Platform.select({
@@ -15,7 +15,8 @@ export default StyleSheet.create({
       flex: 1,
       alignItems: 'flex-start',
       justifyContent: 'center',
-      margin: metrics.baseMargin,
+      marginLeft: metrics.smallMargin,
+      backgroundColor: colors.transparent,
       width: metrics.icons.medium
     }
   })

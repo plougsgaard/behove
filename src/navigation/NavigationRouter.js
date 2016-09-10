@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Platform } from 'react-native'
 import { Scene, Router, ActionConst } from 'react-native-router-flux'
 import styles from './NavigationContainer.styles'
 import NavigationDrawer from './NavigationDrawer'
@@ -12,17 +13,13 @@ import SettingsScene from '../scenes/Settings'
 import ScanScene from '../scenes/Scan'
 
 const getSceneStyle = (/* NavigationSceneRendererProps */ props, computedProps) => {
-  const style = {
-    flex: 1,
-    backgroundColor: '#F1F1F1',
-    shadowColor: null,
-    shadowOffset: null,
-    shadowOpacity: null,
-    shadowRadius: null
-  }
-  if (computedProps.isActive) {
-    style.marginTop = computedProps.hideNavBar ? 0 : 64
-    style.marginBottom = computedProps.hideTabBar ? 0 : 50
+  const style = { backgroundColor: '#F1F1F1', flex: 1 }
+  if (computedProps.isActive && Platform.OS === 'ios') {
+    return {
+      ...style,
+      marginTop: computedProps.hideNavBar ? 0 : 64,
+      marginBottom: computedProps.hideTabBar ? 0 : 50
+    }
   }
   return style
 }
