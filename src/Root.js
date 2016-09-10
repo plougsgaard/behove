@@ -4,6 +4,8 @@ import { Provider } from 'react-redux'
 import configureStore from './redux/store'
 import styles from './Root.styles.js'
 
+import { colors } from './theme'
+
 import NavigationRouter from './navigation/NavigationRouter'
 
 const store = configureStore({
@@ -31,6 +33,7 @@ const Root = React.createClass({
       <Provider store={store}>
         <View style={styles.applicationView}>
           <StatusBar
+            backgroundColor={colors.background} // android
             barStyle='light-content'
           />
           <NavigationRouter />
